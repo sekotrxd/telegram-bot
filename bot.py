@@ -1,13 +1,15 @@
-from telegram import Update
-from telegram.ext import ApplicationBuilder, MessageHandler, ContextTypes, filters
+from telegram.ext import Updater, MessageHandler, Filters
 import os
 
 TOKEN = os.getenv("TOKEN")
 
-async def reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.message:
-        await update.message.reply_text("🔥")
+def echo(update, context):
+    update.message.reply_text("bot çalışıyor 🔥")
 
-app = ApplicationBuilder().token(TOKEN).build()
-app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, reply))
-app.run_polling()
+updater = Updater(TOKEN, use_context=True)
+
+dp = updater.dispatcher
+dp.add_handler(MessageHandler(Filters.text, echo))
+
+updater.start_polling()
+updater.idle()
