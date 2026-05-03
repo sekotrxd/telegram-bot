@@ -1,21 +1,12 @@
 from telegram import Update
 from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTypes
-
 import os
 
 TOKEN = os.getenv("TOKEN")
 
-async def react(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    try:
-        await context.bot.set_message_reaction(
-            chat_id=update.effective_chat.id,
-            message_id=update.effective_message.id,
-            reaction=[{"type": "emoji", "emoji": "🔥"}]
-        )
-    except Exception as e:
-        print(e)
+async def reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("🔥")
 
 app = ApplicationBuilder().token(TOKEN).build()
-app.add_handler(MessageHandler(filters.ALL, react))
-
+app.add_handler(MessageHandler(filters.ALL, reply))
 app.run_polling()
